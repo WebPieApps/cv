@@ -17,7 +17,7 @@ import { DASHBOARD_NESTED_ROUTES, MAIN_ROUTES } from '../../config/router.config
 
 
 const drawerWidth = 240;
-const navItems = [...MAIN_ROUTES, DASHBOARD_NESTED_ROUTES[0]];
+const navItems = [...MAIN_ROUTES];
 
 export default function Navigation() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -29,7 +29,7 @@ export default function Navigation() {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        RTW
+        CV
       </Typography>
       <Divider />
       <List>
@@ -48,7 +48,7 @@ export default function Navigation() {
   return (
     <Box sx={{ display: 'flex' }} mb={8} data-testid="navigation">
       <CssBaseline />
-      <AppBar component="nav" color='success'>
+      <AppBar component="nav">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -64,7 +64,7 @@ export default function Navigation() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            ReactTW
+            CV
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map(({name, title, path}) => (
