@@ -1,9 +1,10 @@
 import { FC } from 'react';
-import { Box, Typography, Container, Grid, Card, CardContent, CardActions, Button, List, ListItem, ListItemIcon, ListItemText, useTheme, useMediaQuery } from '@mui/material';
+import { Box, Typography, Container, Grid, Card, CardContent, CardActions, Button, List, ListItem, ListItemIcon, ListItemText, useTheme, useMediaQuery, Grid2 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DownloadIcon from '@mui/icons-material/Download';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import CodeIcon from '@mui/icons-material/Code';
+import { useNavigate } from 'react-router';
 
 const pricingTiers = [
   {
@@ -30,6 +31,7 @@ const pricingTiers = [
 ];
 
 const Landing: FC = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -70,28 +72,32 @@ const Landing: FC = () => {
               flexWrap: 'wrap'
             }}
           >
-            <Button
+            {/* <Button
               variant="contained"
               size="large"
               color="secondary"
               startIcon={<PictureAsPdfIcon />}
             >
               Download as PDF
-            </Button>
+            </Button> */}
             <Button
               variant="outlined"
               size="large"
               color="inherit"
               startIcon={<CodeIcon />}
+              onClick={() => {
+                // navigate to the new route in react router
+                navigate('/cv');
+              }}
             >
-              Export as JSON
+              Create Now
             </Button>
           </Box>
         </Container>
       </Box>
 
       {/* Pricing Section */}
-      <Container maxWidth="lg" sx={{ py: { xs: 8, sm: 12 } }}>
+      {/* <Container maxWidth="lg" sx={{ py: { xs: 8, sm: 12 } }}>
         <Typography
           variant="h3"
           component="h2"
@@ -162,10 +168,10 @@ const Landing: FC = () => {
             </Grid>
           ))}
         </Grid>
-      </Container>
+      </Container> */}
       {/* Theme Preview Section */}
       <Container maxWidth="lg" sx={{ py: { xs: 8, sm: 12 } }}>
-        <Typography
+        {/* <Typography
           variant="h3"
           component="h2"
           align="center"
@@ -173,8 +179,8 @@ const Landing: FC = () => {
           aria-label="CV Theme Previews"
         >
           Beautiful Themes for Your CV
-        </Typography>
-        <Grid container spacing={4} justifyContent="center">
+        </Typography> */}
+        {/* <Grid container spacing={4} justifyContent="center">
           {[
             { title: 'Modern', image: 'https://via.placeholder.com/400x500' },
             { title: 'Professional', image: 'https://via.placeholder.com/400x500' },
@@ -217,7 +223,9 @@ const Landing: FC = () => {
               </Card>
             </Grid>
           ))}
-        </Grid>
+        </Grid> */}
+
+
       </Container>
     </Box>
   );
