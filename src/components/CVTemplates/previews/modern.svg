@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="500" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="white"/>
+  
+  <!-- Header Section -->
+  <rect x="30" y="30" width="340" height="100" fill="#f8f8f8"/>
+  <text x="200" y="60" font-family="Helvetica" font-size="24" fill="#2196F3" text-anchor="middle">John Doe</text>
+  <text x="200" y="85" font-family="Helvetica" font-size="16" fill="#666" text-anchor="middle">Senior Software Engineer</text>
+  
+  <!-- Experience Section -->
+  <rect x="30" y="150" width="340" height="30" fill="#f0f0f0"/>
+  <text x="40" y="170" font-family="Helvetica" font-size="16" fill="#2196F3">Work Experience</text>
+  
+  <!-- Experience Item -->
+  <text x="40" y="200" font-family="Helvetica" font-size="14" fill="#333">Senior Developer at Tech Corp</text>
+  <text x="40" y="220" font-family="Helvetica" font-size="12" fill="#666">2020 - Present</text>
+  
+  <!-- Skills Section -->
+  <rect x="30" y="260" width="340" height="30" fill="#f0f0f0"/>
+  <text x="40" y="280" font-family="Helvetica" font-size="16" fill="#2196F3">Skills</text>
+  
+  <!-- Education Section -->
+  <rect x="30" y="370" width="340" height="30" fill="#f0f0f0"/>
+  <text x="40" y="390" font-family="Helvetica" font-size="16" fill="#2196F3">Education</text>
+</svg>

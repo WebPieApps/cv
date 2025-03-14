@@ -1,9 +1,12 @@
 import { FC, useState } from 'react';
-import { Box, Container, Paper, Typography, Grid, Avatar, Divider, Button } from '@mui/material';
+import { Box, Container, Paper, Typography, Grid, Avatar, Button } from '@mui/material';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import CodeIcon from '@mui/icons-material/Code';
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import ThemeSelector, { Theme } from '../../components/ThemeSelector/ThemeSelector';
 import CVEditor from '../../components/CVEditor/CVEditor';
+import CVPdf from '../../components/CVPdf/CVPdf';
+import { templates } from '../../components/CVTemplates/templates';
 
 export interface CVData {
   basics: {
@@ -239,45 +242,63 @@ const themes: Theme[] = [
 
 const CV: FC = () => {
   const [cvData, setCvData] = useState<CVData>(sampleData);
+  const [selectedTemplate, setSelectedTemplate] = useState('modern');
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <ThemeSelector
+            themes={templates}
+            selectedTheme={selectedTemplate}
+            onThemeSelect={setSelectedTemplate}
+          />
+        </Grid>
         <Grid item xs={12} md={4}>
           <CVEditor data={cvData} onChange={setCvData} />
         </Grid>
         <Grid item xs={12} md={8}>
           <Paper elevation={3} sx={{ p: 4 }}>
-            <Box sx={{ mb: 4, textAlign: 'center' }}>
-              <Avatar
-                src={cvData.basics.image}
-                alt={cvData.basics.name}
-                sx={{ width: 120, height: 120, mx: 'auto', mb: 2 }}
-              />
-              <Typography variant="h4" component="h1" gutterBottom>
-                {cvData.basics.name}
-              </Typography>
-              <Typography variant="h6" color="text.secondary" gutterBottom>
-                {cvData.basics.label}
-              </Typography>
-              <Typography variant="body1" paragraph>
-                {cvData.basics.summary}
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-                <Button
-                  variant="contained"
-                  startIcon={<PictureAsPdfIcon />}
+            <Paper elevation={3} sx={{ p: 4 }}>
+              <PDFViewer width="100%" height={800}>
+                <CVPdf data={cvData} templateId={selectedTemplate} />
+              </PDFViewer>
+              <Box sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'center' }}>
+                <PDFDownloadLink
+                  document={<CVPdf data={cvData} templateId={selectedTemplate} />}
+                  fileName="cv.pdf"
                 >
-                  Download PDF
-                </Button>
+                  {({ loading }) => (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      startIcon={<PictureAsPdfIcon />}
+                      disabled={loading}
+                    >
+                      {loading ? 'Generating PDF...' : 'Download PDF'}
+                    </Button>
+                  )}
+                </PDFDownloadLink>
                 <Button
                   variant="outlined"
                   startIcon={<CodeIcon />}
+                  onClick={() => {
+                    const jsonString = JSON.stringify(cvData, null, 2);
+                    const blob = new Blob([jsonString], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'cv.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                  }}
                 >
                   Export JSON
                 </Button>
               </Box>
-            </Box>
+            </Paper>
 
             <Box component="section" sx={{ mb: 4 }}>
               <Typography variant="h5" component="h2" gutterBottom>
