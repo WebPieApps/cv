@@ -10,7 +10,31 @@ interface CVPdfProps {
 
 const CVPdf: FC<CVPdfProps> = ({ data, templateId }) => {
   const selectedTemplate = templates.find(template => template.id === templateId) || templates[0];
-  const styles = StyleSheet.create(selectedTemplate.styles);
+  const styles = StyleSheet.create({
+    ...selectedTemplate.styles,
+    page: {
+      flexDirection: 'column',
+      backgroundColor: '#ffffff',
+      padding: 30
+    },
+    header: {
+      marginBottom: 20
+    },
+    section: {
+      marginBottom: 10
+    },
+    workItem: {
+      marginBottom: 10
+    },
+    name: selectedTemplate.styles.name,
+    label: selectedTemplate.styles.label,
+    summary: selectedTemplate.styles.summary,
+    sectionTitle: selectedTemplate.styles.sectionTitle,
+    workTitle: selectedTemplate.styles.workTitle,
+    workDates: selectedTemplate.styles.workDates,
+    workSummary: selectedTemplate.styles.workSummary,
+    highlight: selectedTemplate.styles.highlight
+  });
 
   return (
     <Document>

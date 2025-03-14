@@ -15,61 +15,48 @@ export const templates: CVTemplate[] = [
     preview: '/previews/modern.svg',
     description: 'A clean and contemporary design with emphasis on readability',
     styles: {
-      page: {
-        padding: 30,
-        fontFamily: 'Helvetica',
-      },
-      header: {
-        marginBottom: 20,
-        textAlign: 'center',
-      },
       name: {
         fontSize: 24,
-        marginBottom: 5,
         color: '#2196F3',
+        marginBottom: 8
       },
       label: {
         fontSize: 16,
         color: '#666',
-        marginBottom: 10,
+        marginBottom: 8
       },
       summary: {
         fontSize: 12,
-        marginBottom: 20,
-        lineHeight: 1.5,
-      },
-      section: {
-        marginBottom: 15,
+        lineHeight: 1.6,
+        marginBottom: 16
       },
       sectionTitle: {
         fontSize: 16,
-        marginBottom: 10,
-        backgroundColor: '#f0f0f0',
-        padding: 5,
+        padding: 8,
         color: '#2196F3',
-      },
-      workItem: {
-        marginBottom: 10,
+        marginBottom: 8
       },
       workTitle: {
         fontSize: 14,
-        marginBottom: 5,
         color: '#333',
+        fontWeight: 'bold',
+        marginBottom: 4
       },
       workDates: {
         fontSize: 12,
         color: '#666',
-        marginBottom: 5,
+        marginBottom: 4
       },
       workSummary: {
         fontSize: 12,
-        marginBottom: 5,
-        lineHeight: 1.4,
+        lineHeight: 1.5,
+        marginBottom: 8,
+        width: '100%'
       },
       highlight: {
         fontSize: 12,
-        marginLeft: 10,
         marginBottom: 2,
+        width: '100%'
       },
     },
   },
@@ -79,60 +66,47 @@ export const templates: CVTemplate[] = [
     preview: '/previews/classic.svg',
     description: 'Traditional and professional layout suitable for all industries',
     styles: {
-      page: {
-        padding: 40,
-        fontFamily: 'Times-Roman',
-      },
-      header: {
-        marginBottom: 25,
-        textAlign: 'left',
-      },
       name: {
-        fontSize: 26,
-        marginBottom: 8,
+        fontSize: 24,
         color: '#000',
+        marginBottom: 8
       },
       label: {
-        fontSize: 18,
+        fontSize: 16,
         color: '#333',
-        marginBottom: 12,
+        marginBottom: 8
       },
       summary: {
         fontSize: 12,
-        marginBottom: 25,
         lineHeight: 1.6,
-      },
-      section: {
-        marginBottom: 20,
+        marginBottom: 16
       },
       sectionTitle: {
-        fontSize: 18,
-        marginBottom: 12,
+        fontSize: 16,
         borderBottom: '1pt solid #000',
-        paddingBottom: 4,
-      },
-      workItem: {
-        marginBottom: 15,
+        paddingBottom: 8,
+        marginBottom: 8
       },
       workTitle: {
         fontSize: 14,
-        marginBottom: 6,
         fontWeight: 'bold',
+        marginBottom: 4
       },
       workDates: {
         fontSize: 12,
         color: '#333',
-        marginBottom: 6,
+        marginBottom: 4
       },
       workSummary: {
         fontSize: 12,
-        marginBottom: 6,
         lineHeight: 1.5,
+        marginBottom: 8,
+        width: '100%'
       },
       highlight: {
         fontSize: 12,
-        marginLeft: 12,
-        marginBottom: 3,
+        marginBottom: 2,
+        width: '100%'
       },
     },
   },

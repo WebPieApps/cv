@@ -7,6 +7,8 @@ import ThemeSelector, { Theme } from '../../components/ThemeSelector/ThemeSelect
 import CVEditor from '../../components/CVEditor/CVEditor';
 import CVPdf from '../../components/CVPdf/CVPdf';
 import { templates } from '../../components/CVTemplates/templates';
+import CVPreview from '../../components/CVPreview/CVPreview';
+import CVEditorModal from '../../components/CVEditor/CVEditorModal';
 
 export interface CVData {
   basics: {
@@ -219,157 +221,77 @@ const sampleData: CVData = {
   ]
 };
 
-const themes: Theme[] = [
-  {
-    id: 'modern',
-    name: 'Modern',
-    preview: 'https://via.placeholder.com/400x500',
-    description: 'Clean and contemporary design with emphasis on visual hierarchy'
-  },
-  {
-    id: 'professional',
-    name: 'Professional',
-    preview: 'https://via.placeholder.com/400x500',
-    description: 'Traditional layout perfect for corporate environments'
-  },
-  {
-    id: 'creative',
-    name: 'Creative',
-    preview: 'https://via.placeholder.com/400x500',
-    description: 'Unique design that showcases personality and creativity'
-  }
-];
+
 
 const CV: FC = () => {
   const [cvData, setCvData] = useState<CVData>(sampleData);
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Grid container spacing={4}>
         <Grid item xs={12}>
-          <ThemeSelector
-            themes={templates}
-            selectedTheme={selectedTemplate}
-            onThemeSelect={setSelectedTemplate}
-          />
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+            <ThemeSelector
+              themes={templates}
+              selectedTheme={selectedTemplate}
+              onThemeSelect={setSelectedTemplate}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIsEditorOpen(true)}
+            >
+              Edit CV
+            </Button>
+          </Box>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <CVEditor data={cvData} onChange={setCvData} />
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <Paper elevation={3} sx={{ p: 4 }}>
-            <Paper elevation={3} sx={{ p: 4 }}>
-              <PDFViewer width="100%" height={800}>
-                <CVPdf data={cvData} templateId={selectedTemplate} />
-              </PDFViewer>
-              <Box sx={{ mt: 2, display: 'flex', gap: 2, justifyContent: 'center' }}>
-                <PDFDownloadLink
-                  document={<CVPdf data={cvData} templateId={selectedTemplate} />}
-                  fileName="cv.pdf"
-                >
-                  {({ loading }) => (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      startIcon={<PictureAsPdfIcon />}
-                      disabled={loading}
-                    >
-                      {loading ? 'Generating PDF...' : 'Download PDF'}
-                    </Button>
-                  )}
-                </PDFDownloadLink>
+        <Grid item xs={12}>
+          <CVPreview data={cvData} templateId={selectedTemplate} />
+          <Box sx={{ mt: 4, display: 'flex', gap: 2, justifyContent: 'center' }}>
+            <PDFDownloadLink
+              document={<CVPdf data={cvData} templateId={selectedTemplate} />}
+              fileName="cv.pdf"
+            >
+              {({ loading }) => (
                 <Button
-                  variant="outlined"
-                  startIcon={<CodeIcon />}
-                  onClick={() => {
-                    const jsonString = JSON.stringify(cvData, null, 2);
-                    const blob = new Blob([jsonString], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'cv.json';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                  }}
+                  variant="contained"
+                  color="primary"
+                  startIcon={<PictureAsPdfIcon />}
+                  disabled={loading}
                 >
-                  Export JSON
+                  {loading ? 'Generating PDF...' : 'Download PDF'}
                 </Button>
-              </Box>
-            </Paper>
-
-            <Box component="section" sx={{ mb: 4 }}>
-              <Typography variant="h5" component="h2" gutterBottom>
-                Work Experience
-              </Typography>
-              {cvData.work.map((work, index) => (
-                <Box key={index} sx={{ mb: 3 }}>
-                  <Typography variant="h6" component="h3">
-                    {work.position} at {work.company}
-                  </Typography>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    {work.startDate} - {work.endDate}
-                  </Typography>
-                  <Typography variant="body1" paragraph>
-                    {work.summary}
-                  </Typography>
-                  {work.highlights.length > 0 && (
-                    <Box component="ul" sx={{ pl: 2 }}>
-                      {work.highlights.map((highlight, i) => (
-                        <Typography
-                          key={i}
-                          component="li"
-                          variant="body2"
-                          paragraph
-                        >
-                          {highlight}
-                        </Typography>
-                      ))}
-                    </Box>
-                  )}
-                </Box>
-              ))}
-            </Box>
-
-            <Box component="section" sx={{ mb: 4 }}>
-              <Typography variant="h5" component="h2" gutterBottom>
-                Education
-              </Typography>
-              {cvData.education.map((edu, index) => (
-                <Box key={index} sx={{ mb: 3 }}>
-                  <Typography variant="h6" component="h3">
-                    {edu.studyType} in {edu.area}
-                  </Typography>
-                  <Typography variant="subtitle1">
-                    {edu.institution}
-                  </Typography>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    {edu.startDate} - {edu.endDate}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-
-            <Box component="section" sx={{ mb: 4 }}>
-              <Typography variant="h5" component="h2" gutterBottom>
-                Skills
-              </Typography>
-              {cvData.skills.map((skill, index) => (
-                <Box key={index} sx={{ mb: 2 }}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    {skill.name} - {skill.level}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {skill.keywords.join(', ')}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </Paper>
+              )}
+            </PDFDownloadLink>
+            <Button
+              variant="outlined"
+              startIcon={<CodeIcon />}
+              onClick={() => {
+                const jsonString = JSON.stringify(cvData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'cv.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+              }}
+            >
+              Export JSON
+            </Button>
+          </Box>
         </Grid>
       </Grid>
+      <CVEditorModal
+        open={isEditorOpen}
+        onClose={() => setIsEditorOpen(false)}
+        data={cvData}
+        onChange={setCvData}
+      />
     </Container>
   );
 };
