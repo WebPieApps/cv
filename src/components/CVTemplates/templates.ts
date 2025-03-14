@@ -12,7 +12,7 @@ export const templates: CVTemplate[] = [
   {
     id: 'modern',
     name: 'Modern',
-    preview: '/previews/modern.svg',
+    preview: "/previews/modern.svg",
     description: 'A clean and contemporary design with emphasis on readability',
     styles: {
       name: {

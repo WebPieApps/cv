@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Box, Card, CardActionArea, CardContent, CardMedia, Grid2 as Grid, Typography } from '@mui/material';
 
 export interface Theme {
   id: string;
@@ -18,7 +18,7 @@ const ThemeSelector: FC<ThemeSelectorProps> = ({ themes, selectedTheme, onThemeS
   return (
     <Grid container spacing={3}>
       {themes.map((theme) => (
-        <Grid item xs={12} sm={6} md={3} key={theme.id}>
+        <Grid size={{xs: 12,  sm:6, md:3}} key={theme.id}>
           <Card
             sx={{
               border: theme.id === selectedTheme ? '2px solid primary.main' : 'none',
@@ -33,8 +33,10 @@ const ThemeSelector: FC<ThemeSelectorProps> = ({ themes, selectedTheme, onThemeS
                 component="img"
                 height="140"
                 image={theme.preview}
+                src={theme.preview}
                 alt={`${theme.name} theme preview`}
               />
+              <img src={theme.preview} alt={theme.name} style={{ display: 'none' }} />
               <CardContent>
                 <Typography gutterBottom variant="h6" component="div">
                   {theme.name}

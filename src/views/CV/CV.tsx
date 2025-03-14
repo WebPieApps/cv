@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Box, Container, Paper, Typography, Grid, Avatar, Button } from '@mui/material';
+import { Box, Container, Paper, Typography, Grid2 as Grid, Avatar, Button } from '@mui/material';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import CodeIcon from '@mui/icons-material/Code';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
@@ -231,13 +231,20 @@ const CV: FC = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Grid container spacing={4}>
-        <Grid item xs={12}>
+        {/* CV Template Section */}
+        <Grid size={12} data-testid="cv_template_selection">
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
             <ThemeSelector
               themes={templates}
               selectedTheme={selectedTemplate}
               onThemeSelect={setSelectedTemplate}
             />
+
+          </Box>
+        </Grid>
+        <Grid size={12}>
+          {/* CV Navigations Section */}
+          <Box data-testid="cv_navigation" sx={{ mt: 4, display: 'flex', gap: 2, justifyContent: 'center' }}>
             <Button
               variant="contained"
               color="primary"
@@ -245,14 +252,10 @@ const CV: FC = () => {
             >
               Edit CV
             </Button>
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <CVPreview data={cvData} templateId={selectedTemplate} />
-          <Box sx={{ mt: 4, display: 'flex', gap: 2, justifyContent: 'center' }}>
+
             <PDFDownloadLink
               document={<CVPdf data={cvData} templateId={selectedTemplate} />}
-              fileName="cv.pdf"
+              fileName={`${cvData.basics.name.split(' ').join('_')}_cv.pdf`}
             >
               {({ loading }) => (
                 <Button
@@ -284,6 +287,12 @@ const CV: FC = () => {
               Export JSON
             </Button>
           </Box>
+
+          {/* CV Preview Section */}
+          <Box mt={2} data-testid="cv_preview">
+            <CVPreview data={cvData} templateId={selectedTemplate} />
+          </Box>
+
         </Grid>
       </Grid>
       <CVEditorModal
