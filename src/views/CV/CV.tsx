@@ -1,7 +1,11 @@
-import { FC } from 'react';
-import { Box, Container, Paper, Typography, Grid, Avatar, Divider } from '@mui/material';
+import { FC, useState } from 'react';
+import { Box, Container, Paper, Typography, Grid, Avatar, Divider, Button } from '@mui/material';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import CodeIcon from '@mui/icons-material/Code';
+import ThemeSelector, { Theme } from '../../components/ThemeSelector/ThemeSelector';
+import CVEditor from '../../components/CVEditor/CVEditor';
 
-interface CVData {
+export interface CVData {
   basics: {
     name: string;
     label: string;
@@ -212,296 +216,139 @@ const sampleData: CVData = {
   ]
 };
 
+const themes: Theme[] = [
+  {
+    id: 'modern',
+    name: 'Modern',
+    preview: 'https://via.placeholder.com/400x500',
+    description: 'Clean and contemporary design with emphasis on visual hierarchy'
+  },
+  {
+    id: 'professional',
+    name: 'Professional',
+    preview: 'https://via.placeholder.com/400x500',
+    description: 'Traditional layout perfect for corporate environments'
+  },
+  {
+    id: 'creative',
+    name: 'Creative',
+    preview: 'https://via.placeholder.com/400x500',
+    description: 'Unique design that showcases personality and creativity'
+  }
+];
+
 const CV: FC = () => {
-  const data = sampleData;
+  const [cvData, setCvData] = useState<CVData>(sampleData);
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        {/* Header Section */}
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
-          <Avatar
-            src={data.basics.image}
-            alt={data.basics.name}
-            sx={{ width: 100, height: 100, mr: 3 }}
-          />
-          <Box>
-            <Typography variant="h4" component="h1">
-              {data.basics.name}
-            </Typography>
-            <Typography variant="h6" color="primary">
-              {data.basics.label}
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              {data.basics.location.address}, {data.basics.location.city}, {data.basics.location.countryCode}
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* Contact Information */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="body1">
-            Email: {data.basics.email}
-          </Typography>
-          <Typography variant="body1">
-            Phone: {data.basics.phone}
-          </Typography>
-          <Box sx={{ mt: 1 }}>
-            {data.basics.profiles.map((profile, index) => (
-              <Typography key={index} variant="body1">
-                {profile.network}: <a href={profile.url} target="_blank" rel="noopener noreferrer">{profile.url}</a>
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={4}>
+          <CVEditor data={cvData} onChange={setCvData} />
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <Paper elevation={3} sx={{ p: 4 }}>
+            <Box sx={{ mb: 4, textAlign: 'center' }}>
+              <Avatar
+                src={cvData.basics.image}
+                alt={cvData.basics.name}
+                sx={{ width: 120, height: 120, mx: 'auto', mb: 2 }}
+              />
+              <Typography variant="h4" component="h1" gutterBottom>
+                {cvData.basics.name}
               </Typography>
-            ))}
-          </Box>
-        </Box>
-
-        {/* Summary */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Professional Summary
-          </Typography>
-          <Typography variant="body1">
-            {data.basics.summary}
-          </Typography>
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        {/* Work Experience */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Work Experience
-          </Typography>
-          {data.work.map((work, index) => (
-            <Box key={index} sx={{ mb: 3 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {work.position} at {work.company}
+              <Typography variant="h6" color="text.secondary" gutterBottom>
+                {cvData.basics.label}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {work.startDate} - {work.endDate}
+              <Typography variant="body1" paragraph>
+                {cvData.basics.summary}
               </Typography>
-              <Typography variant="body1" sx={{ mt: 1 }}>
-                {work.summary}
-              </Typography>
-              <Box sx={{ mt: 1 }}>
-                <Typography variant="subtitle2">Key Achievements:</Typography>
-                <ul style={{ margin: '8px 0' }}>
-                  {work.achievements.map((achievement, i) => (
-                    <li key={i}>{achievement}</li>
-                  ))}
-                </ul>
-                <Typography variant="subtitle2">Highlights:</Typography>
-                <ul style={{ margin: '8px 0' }}>
-                  {work.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
-                  ))}
-                </ul>
+              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+                <Button
+                  variant="contained"
+                  startIcon={<PictureAsPdfIcon />}
+                >
+                  Download PDF
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<CodeIcon />}
+                >
+                  Export JSON
+                </Button>
               </Box>
             </Box>
-          ))}
-        </Box>
 
-        <Divider sx={{ my: 3 }} />
+            <Box component="section" sx={{ mb: 4 }}>
+              <Typography variant="h5" component="h2" gutterBottom>
+                Work Experience
+              </Typography>
+              {cvData.work.map((work, index) => (
+                <Box key={index} sx={{ mb: 3 }}>
+                  <Typography variant="h6" component="h3">
+                    {work.position} at {work.company}
+                  </Typography>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    {work.startDate} - {work.endDate}
+                  </Typography>
+                  <Typography variant="body1" paragraph>
+                    {work.summary}
+                  </Typography>
+                  {work.highlights.length > 0 && (
+                    <Box component="ul" sx={{ pl: 2 }}>
+                      {work.highlights.map((highlight, i) => (
+                        <Typography
+                          key={i}
+                          component="li"
+                          variant="body2"
+                          paragraph
+                        >
+                          {highlight}
+                        </Typography>
+                      ))}
+                    </Box>
+                  )}
+                </Box>
+              ))}
+            </Box>
 
-        {/* Education */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Education
-          </Typography>
-          {data.education.map((edu, index) => (
-            <Box key={index} sx={{ mb: 3 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {edu.studyType} in {edu.area}
+            <Box component="section" sx={{ mb: 4 }}>
+              <Typography variant="h5" component="h2" gutterBottom>
+                Education
               </Typography>
-              <Typography variant="body1">
-                {edu.institution}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {edu.startDate} - {edu.endDate}
-              </Typography>
-              <Typography variant="body2">
-                Grade: {edu.grade}
-              </Typography>
-              {edu.courses.length > 0 && (
-                <Box sx={{ mt: 1 }}>
-                  <Typography variant="subtitle2">Key Courses:</Typography>
-                  <Typography variant="body2">
-                    {edu.courses.join(', ')}
+              {cvData.education.map((edu, index) => (
+                <Box key={index} sx={{ mb: 3 }}>
+                  <Typography variant="h6" component="h3">
+                    {edu.studyType} in {edu.area}
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    {edu.institution}
+                  </Typography>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    {edu.startDate} - {edu.endDate}
                   </Typography>
                 </Box>
-              )}
+              ))}
             </Box>
-          ))}
-        </Box>
 
-        <Divider sx={{ my: 3 }} />
-
-        {/* Certifications */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Certifications
-          </Typography>
-          {data.certifications.map((cert, index) => (
-            <Box key={index} sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {cert.name}
+            <Box component="section" sx={{ mb: 4 }}>
+              <Typography variant="h5" component="h2" gutterBottom>
+                Skills
               </Typography>
-              <Typography variant="body2">
-                Issuer: {cert.issuer} | Date: {cert.date}
-              </Typography>
-              {cert.url && (
-                <Typography variant="body2">
-                  <a href={cert.url} target="_blank" rel="noopener noreferrer">View Certificate</a>
-                </Typography>
-              )}
-            </Box>
-          ))}
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        {/* Skills */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Skills
-          </Typography>
-          {data.skills.map((skill, index) => (
-            <Box key={index} sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {skill.name} - {skill.level}
-              </Typography>
-              <Typography variant="body1">
-                {skill.keywords.join(', ')}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        {/* Languages */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Languages
-          </Typography>
-          {data.languages.map((lang, index) => (
-            <Typography key={index} variant="body1">
-              {lang.language} - {lang.fluency}
-            </Typography>
-          ))}
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        {/* Projects */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Projects
-          </Typography>
-          {data.projects.map((project, index) => (
-            <Box key={index} sx={{ mb: 3 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {project.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {project.startDate} - {project.endDate}
-              </Typography>
-              <Typography variant="body1" sx={{ mt: 1 }}>
-                {project.description}
-              </Typography>
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                Technologies: {project.technologies.join(', ')}
-              </Typography>
-              {project.url && (
-                <Typography variant="body2">
-                  <a href={project.url} target="_blank" rel="noopener noreferrer">View Project</a>
-                </Typography>
-              )}
-            </Box>
-          ))}
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        {/* Publications */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Publications
-          </Typography>
-          {data.publications.map((pub, index) => (
-            <Box key={index} sx={{ mb: 3 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {pub.name}
-              </Typography>
-              <Typography variant="body2">
-                Published in {pub.publisher} ({pub.releaseDate})
-              </Typography>
-              <Typography variant="body1" sx={{ mt: 1 }}>
-                {pub.summary}
-              </Typography>
-              {pub.url && (
-                <Typography variant="body2">
-                  <a href={pub.url} target="_blank" rel="noopener noreferrer">Read Publication</a>
-                </Typography>
-              )}
-            </Box>
-          ))}
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        {/* Awards */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Awards & Achievements
-          </Typography>
-          {data.awards.map((award, index) => (
-            <Box key={index} sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {award.title}
-              </Typography>
-              <Typography variant="body2">
-                {award.awarder} - {award.date}
-              </Typography>
-              <Typography variant="body1">
-                {award.summary}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        {/* Volunteer Work */}
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Volunteer Experience
-          </Typography>
-          {data.volunteer.map((vol, index) => (
-            <Box key={index} sx={{ mb: 3 }}>
-              <Typography variant="subtitle1" fontWeight="bold">
-                {vol.position} at {vol.organization}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {vol.startDate} - {vol.endDate}
-              </Typography>
-              <Typography variant="body1" sx={{ mt: 1 }}>
-                {vol.summary}
-              </Typography>
-              {vol.highlights.length > 0 && (
-                <Box sx={{ mt: 1 }}>
-                  <Typography variant="subtitle2">Highlights:</Typography>
-                  <ul style={{ margin: '8px 0' }}>
-                    {vol.highlights.map((highlight, i) => (
-                      <li key={i}>{highlight}</li>
-                    ))}
-                  </ul>
+              {cvData.skills.map((skill, index) => (
+                <Box key={index} sx={{ mb: 2 }}>
+                  <Typography variant="subtitle1" gutterBottom>
+                    {skill.name} - {skill.level}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {skill.keywords.join(', ')}
+                  </Typography>
                 </Box>
-              )}
+              ))}
             </Box>
-          ))}
-        </Box>
-      </Paper>
+          </Paper>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
