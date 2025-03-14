@@ -5,6 +5,7 @@ import { Home, Settings } from "../views/Dashboard";
 import Landing from "../views/Landing/Landing";
 import Contact from "../views/Contact";
 import Profile from "../views/Dashboard/Profile";
+import CV from "../views/CV/CV";
 
 
 export const configureRoute = (routes: ROUTE[]) => {
@@ -31,11 +32,17 @@ export const MAIN_ROUTES: ROUTE[] = [
 		name: 'about',
 		element: <About />,
 	},
+	// {
+	// 	path: '/contact',
+	// 	title: "Contact Us",
+	// 	name: 'contact',
+	// 	element: <Contact />,
+	// },
 	{
-		path: '/contact',
-		title: "Contact Us",
-		name: 'contact',
-		element: <Contact />,
+		path: '/cv',
+		title: "CV",
+		name: 'cv',
+		element: <CV />,
 	}
 ]
 
